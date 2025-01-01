@@ -1,47 +1,52 @@
-// inputNode.js
-
-import { useState } from 'react';
-import { Handle, Position } from 'reactflow';
+import React, { useState } from "react";
+import BaseNode from "./basenode";
+import { Position } from 'reactflow';
+import { Input } from "../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Label } from "../components/ui/label";
 
 export const InputNode = ({ id, data }) => {
-  const [currName, setCurrName] = useState(data?.inputName || id.replace('customInput-', 'input_'));
-  const [inputType, setInputType] = useState(data.inputType || 'Text');
-
-  const handleNameChange = (e) => {
-    setCurrName(e.target.value);
-  };
-
-  const handleTypeChange = (e) => {
-    setInputType(e.target.value);
-  };
+  const [name, setName] = useState(data?.inputName || `input_${id}`);
+  const [type, setType] = useState(data?.inputType || "Text");
 
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <div>
-        <span>Input</span>
-      </div>
-      <div>
-        <label>
-          Name:
-          <input 
-            type="text" 
-            value={currName} 
-            onChange={handleNameChange} 
+    <BaseNode
+      id={id}
+      type="Input Node"
+      data={data}
+      handles={[
+        { type: "source", position: Position.Right, id: "value" }
+      ]}
+    >
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+            Name
+          </Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="h-8"
+            placeholder="Enter input name"
           />
-        </label>
-        <label>
-          Type:
-          <select value={inputType} onChange={handleTypeChange}>
-            <option value="Text">Text</option>
-            <option value="File">File</option>
-          </select>
-        </label>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="type" className="text-sm font-medium text-gray-700">
+            Type
+          </Label>
+          <Select value={type} onValueChange={setType}>
+            <SelectTrigger className="h-8">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Text">Text</SelectItem>
+              <SelectItem value="File">File</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id={`${id}-value`}
-      />
-    </div>
+    </BaseNode>
   );
-}
+};
