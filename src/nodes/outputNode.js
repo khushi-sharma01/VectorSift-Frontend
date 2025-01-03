@@ -1,6 +1,9 @@
 import React from "react";
-import BaseNode from "./basenode";
 import { Position } from "reactflow";
+
+import { useStore } from "../store";
+
+import BaseNode from "./basenode";
 import { Input } from "@components/ui/input";
 import {
   Select,
@@ -10,7 +13,7 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { Label } from "@components/ui/label";
-import { useStore } from "../store";
+
 
 export const OutputNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
@@ -28,7 +31,7 @@ export const OutputNode = ({ id, data }) => {
       id={id}
       type="Output Node"
       data={data}
-      handles={[{ type: "target", position: Position.Left, id: "value" ,  style: { top: "22%" }, data: { targetHandleText: "output" }, }]}
+      handles={[{ type: "target", position: Position.Left, id: "value" ,  style: { top: "22%" }, data: { targetHandleText: "Connect another node's output" }, }]}
     >
       <div className="space-y-4">
         <div className="space-y-2">

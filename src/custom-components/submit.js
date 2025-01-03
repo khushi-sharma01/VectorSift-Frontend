@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { Button } from "../components/ui/button";
+import React from "react";
 import { Loader2 } from "lucide-react";
 
-export const SubmitButton = ({ isLoading, onSubmit }) => {
+import { Button } from "../components/ui/button";
+
+export const SubmitButton = ({ isLoading, onSubmit,disabled }) => {
   return (
     <div className="flex justify-end">
       <Button
         type="button"
         className="bg-purple-600 dark:text-white hover:bg-purple-700"
         onClick={onSubmit}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
       >
         {isLoading ? (
           <>

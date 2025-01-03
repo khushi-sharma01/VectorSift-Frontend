@@ -1,6 +1,8 @@
+import { AlertCircle } from "lucide-react";
+
 import { DraggableNode } from "./draggableNode";
 import { Alert, AlertDescription } from "../components/ui/alert"; 
-import { AlertCircle } from "lucide-react";
+
 const nodeTypes = [
   {
     type: "customInput",

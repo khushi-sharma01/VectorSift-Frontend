@@ -1,6 +1,7 @@
 import React from "react";
-import BaseNode from "./basenode";
 import { Position } from "reactflow";
+
+import BaseNode from "./basenode";
 import { Card } from "@components/ui/card";
 
 export const LLMNode = ({ id, data }) => {
@@ -21,7 +22,7 @@ export const LLMNode = ({ id, data }) => {
     },
     { type: "source", position: Position.Right, id: "response", data: { sourceHandleText: "output" },  },
   ]
-  console.log("llmhandles",handles)
+
   return (
     <BaseNode
       id={id}

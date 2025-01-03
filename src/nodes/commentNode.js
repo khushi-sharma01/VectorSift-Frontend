@@ -1,8 +1,9 @@
 import React from "react";
+
+import { useStore } from "../store";
+
 import BaseNode from "./basenode";
 import { AutosizeTextarea } from "../components/ui/autosize-textarea";
-import { Label } from "../components/ui/label";
-import { useStore } from "../store";
 
 const CommentNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);

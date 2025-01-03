@@ -1,5 +1,6 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import ReactFlow, { Controls, Background, MiniMap } from "reactflow";
+import "reactflow/dist/style.css";
 import { useStore } from "../store";
 import { shallow } from "zustand/shallow";
 import { InputNode } from "../nodes/inputNode";
@@ -7,22 +8,29 @@ import { LLMNode } from "../nodes/llmNode";
 import { OutputNode } from "../nodes/outputNode";
 import TextNode from "../nodes/textNode";
 import CustomEdge from "./custom-edge";
-import "reactflow/dist/style.css";
 import CommentNode from "../nodes/commentNode";
-
 import TimerNode from "../nodes/timerNode";
 
+// Constants
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
+
+// Node types configuration
 const nodeTypes = {
   customInput: InputNode,
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
   comment: CommentNode,
-  timer:TimerNode
+  timer: TimerNode
 };
 
+// Edge types configuration
+const edgeTypes = {
+  smoothstep: CustomEdge,
+};
+
+// Store selector
 const selector = (state) => ({
   nodes: state.nodes,
   edges: state.edges,
@@ -38,6 +46,7 @@ const selector = (state) => ({
 export const PipelineUI = ({ setPipelineData }) => {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  
   const {
     nodes,
     edges,
@@ -50,16 +59,14 @@ export const PipelineUI = ({ setPipelineData }) => {
     deleteEdge,
   } = useStore(selector, shallow);
 
-  const getInitNodeData = (nodeID, type) => ({
+  // Initialize node data
+  const getInitNodeData = useCallback((nodeID, type) => ({
     id: nodeID,
     nodeType: type,
     onDelete: () => deleteNode(nodeID),
-  });
+  }), [deleteNode]);
 
-  const edgeTypes = {
-    smoothstep: CustomEdge,
-  };
-
+  // Handle node dropping
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -89,14 +96,16 @@ export const PipelineUI = ({ setPipelineData }) => {
         addNode(newNode);
       }
     },
-    [reactFlowInstance]
+    [reactFlowInstance, getNodeID, addNode, getInitNodeData]
   );
 
+  // Handle drag over
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  // Handle keyboard events
   const onKeyDown = useCallback(
     (event) => {
       const target = event.target;
@@ -119,11 +128,13 @@ export const PipelineUI = ({ setPipelineData }) => {
     [nodes, edges, deleteNode, deleteEdge]
   );
 
+  // Set up keyboard event listeners
   useEffect(() => {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onKeyDown]);
 
+  // Update pipeline data when nodes or edges change
   useEffect(() => {
     setPipelineData({ nodes, edges });
   }, [nodes, edges, setPipelineData]);

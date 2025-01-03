@@ -1,11 +1,12 @@
 import React from "react";
+import { CheckCircle2 } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@components/ui/dialog";
-import { CheckCircle2 } from "lucide-react";
 
 const ResponseDialog = ({ isOpen, setIsOpen, response }) => {
   const formatValue = (value, key) => {
@@ -19,7 +20,7 @@ const ResponseDialog = ({ isOpen, setIsOpen, response }) => {
             {value.map((node, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium hover:bg-purple-200 transition-colors"
+                className="px-3 py-1 bg-purple-100  text-purple-700 rounded-full text-sm font-medium hover:bg-purple-200 transition-colors"
               >
                 {node}
               </span>
@@ -30,7 +31,7 @@ const ResponseDialog = ({ isOpen, setIsOpen, response }) => {
       return (
         <div className="pl-4 mt-1">
           {value.map((item, index) => (
-            <div key={index} className="text-gray-700">
+            <div key={index} className="text-gray-700 dark:text-white">
               {Array.isArray(item) ? item.join(" → ") : item}
             </div>
           ))}
@@ -56,14 +57,14 @@ const ResponseDialog = ({ isOpen, setIsOpen, response }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto ">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-purple-500" />
             <span className="text-purple-800">Pipeline Response</span>
           </DialogTitle>
         </DialogHeader>
-        <div className="mt-4 p-4 rounded bg-purple-50">
+        <div className="mt-4 p-4 rounded bg-purple-50 dark:bg-[#191231]">
           {response && renderData(response)}
         </div>
       </DialogContent>

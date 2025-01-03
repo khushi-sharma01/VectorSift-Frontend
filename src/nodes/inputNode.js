@@ -1,6 +1,9 @@
 import React from "react";
-import BaseNode from "./basenode";
 import { Position } from "reactflow";
+
+import { useStore } from "../store";
+
+import BaseNode from "./basenode";
 import { Input } from "@components/ui/input";
 import {
   Select,
@@ -10,7 +13,7 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { Label } from "@components/ui/label";
-import { useStore } from "../store";
+
 
 export const InputNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React,{ useState, useEffect } from "react";
+
 import { useTheme } from "next-themes";
 import { Switch } from "@components/ui/switch";
 import { Moon, Sun } from "lucide-react";
@@ -33,7 +34,10 @@ const App = () => {
   const [response, setResponse] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const isSubmitDisabled = !pipelineData.nodes.length;
+
   const handleSubmit = async () => {
+    if (isSubmitDisabled) return;
     setDialogOpen(true);
     setIsLoading(true);
     try {
@@ -72,7 +76,7 @@ const App = () => {
             <PipelineUI setPipelineData={setPipelineData} />
           </div>
           <div className="p-4 border-t border-border">
-            <SubmitButton isLoading={isLoading} onSubmit={handleSubmit} />
+            <SubmitButton isLoading={isLoading} onSubmit={handleSubmit} disabled={isSubmitDisabled} />
           </div>
         </div>
         {response && (

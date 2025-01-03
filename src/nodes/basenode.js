@@ -1,7 +1,9 @@
 import React from "react";
 import { Handle, Position } from "reactflow";
+
+import { X } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
-import { ArrowRightCircle, X } from "lucide-react";
 
 const BaseNode = ({
   id,
