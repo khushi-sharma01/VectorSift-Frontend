@@ -1,49 +1,88 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { ArrowRightCircle } from 'lucide-react';
+import React from "react";
+import { Handle, Position } from "reactflow";
+import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
+import { ArrowRightCircle, X } from "lucide-react";
 
-const BaseNode = ({ id, type, data, handles = [], children, className = '' }) => {
+const BaseNode = ({
+  id,
+  type,
+  data,
+  handles = [],
+  children,
+  className = "",
+}) => {
+  const handleStyles = (handle) => ({
+    ...handle.style,
+    width: "15px",
+    height: "15px",
+    opacity: 1,
+    zIndex: 50,
+    backgroundColor: handle.type === "target" ? "#78def0" : "#78f084",
+    borderRadius: "50%",
+    ...(handle.position === Position.Left ? { left: "-20px", marginTop: "10px" } : { right: "-20px", marginTop: "3px" })
+  });
+
+  const leftHandles = handles.filter(h => h.position === Position.Left);
+  const rightHandles = handles.filter(h => h.position === Position.Right);
+
   return (
-    <Card className={`w-64 shadow-lg bg-white/95 backdrop-blur-sm hover:shadow-xl transition-all duration-200 ${className}`}>
-      <CardHeader className="p-3 bg-gradient-to-r from-purple-50 to-purple-100">
-        <CardTitle className="text-sm font-medium text-purple-700">{type}</CardTitle>
+    <Card
+      className={`w-64 shadow-lg bg-card backdrop-blur-sm hover:shadow-xl transition-all duration-200 ${className}`}
+    >
+      <CardHeader className="p-3 dark:bg-gradient-to-r dark:from-purple-950 dark:to-purple-900 bg-gradient-to-r from-purple-50 to-purple-100 relative rounded-t-lg">
+        <CardTitle className="text-sm font-medium dark:text-purple-200 text-purple-700">
+          {type}
+        </CardTitle>
+        <X
+          className="absolute top-0 right-1 w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            data?.onDelete?.();
+          }}
+        />
       </CardHeader>
-      <CardContent className="p-3 relative">
-        {children}
-        {handles.map((handle, index) => (
-          <div key={index} >
-            {/* Invisible Handle */}
-            <Handle
-              type={handle.type}
-              position={handle.position}
-              id={`${id}-${handle.id}`}
-              style={{
-                width: '20px',  // Adjust the width
-                height: '20px', 
-                opacity: 0, // Make handle invisible
-                zIndex: 50, // Keep it functional
-              }}
-            />
-            {/* Icon as the handle */}
-            <ArrowRightCircle
-              className={`absolute ${
-                handle.type === 'target' ? 'text-blue-500' : 'text-green-500'
-              }`}
-              style={{
-                
-                width: '20px',  // Adjust the icon size
-                height: '20px',
-                top: handle.position === Position.Top ? '-12px' : '50%',
-                bottom: handle.position === Position.Bottom ? '-12px' : '50%',
-                left: handle.position === Position.Left ? '-2px' : undefined,
-                right: handle.position === Position.Right ? '-20px' : undefined,
-                transform: 'translate(-50%, -50%)',
-                pointerEvents: 'none', // Prevent icon from interfering with interactions
-              }}
-            />
+      <CardContent className="p-3 relative dark:bg-card">
+        <div className="mb-4">
+          {children}
+        </div>
+
+        <div className="flex justify-between items-center">
+          <div className="relative flex-1">
+            {leftHandles.map((handle, index) => (
+              <div key={`left-${index}`} className="relative">
+                <Handle
+                  type={handle.type}
+                  position={handle.position}
+                  id={`${id}-${handle.id}`}
+                  style={handleStyles(handle)}
+                />
+                {handle.type === "target" && (
+                  <span className="text-sm text-muted-foreground">
+                    {handle?.data?.targetHandleText}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
+
+          <div className="relative flex-1 flex justify-end">
+            {rightHandles.map((handle, index) => (
+              <div key={`right-${index}`} className="relative mb-2">
+                {handle.type === "source" && (
+                  <span className="text-sm text-muted-foreground">
+                    {handle?.data?.sourceHandleText}
+                  </span>
+                )}
+                <Handle
+                  type={handle.type}
+                  position={handle.position}
+                  id={`${id}-${handle.id}`}
+                  style={handleStyles(handle)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

@@ -1,22 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import BaseNode from "./basenode";
 import { Position } from "reactflow";
-import { Input } from "../components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Label } from "../components/ui/label";
+import { Input } from "@components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import { Label } from "@components/ui/label";
+import { useStore } from "../store";
 
 export const OutputNode = ({ id, data }) => {
-  const [name, setName] = useState(data?.outputName || `output_${id}`);
-  const [type, setType] = useState(data?.outputType || "Text");
+  const updateNodeField = useStore((state) => state.updateNodeField);
+
+  const handleNameChange = (value) => {
+    updateNodeField(id, "outputName", value);
+  };
+
+  const handleTypeChange = (value) => {
+    updateNodeField(id, "outputType", value);
+  };
 
   return (
     <BaseNode
       id={id}
       type="Output Node"
       data={data}
-      handles={[
-        { type: "target", position: Position.Left, id: "value" }
-      ]}
+      handles={[{ type: "target", position: Position.Left, id: "value" ,  style: { top: "22%" }, data: { targetHandleText: "output" }, }]}
     >
       <div className="space-y-4">
         <div className="space-y-2">
@@ -25,18 +37,21 @@ export const OutputNode = ({ id, data }) => {
           </Label>
           <Input
             id="outputName"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={data?.outputName || `output_${id}`}
+            onChange={(e) => handleNameChange(e.target.value)}
             className="h-8"
             placeholder="Enter output name"
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="outputType" className="text-sm font-medium text-gray-700">
             Type
           </Label>
-          <Select value={type} onValueChange={setType}>
+          <Select 
+            value={data?.outputType || "Text"} 
+            onValueChange={handleTypeChange}
+          >
             <SelectTrigger className="h-8">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
