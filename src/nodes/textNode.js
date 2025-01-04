@@ -63,7 +63,7 @@ export const TextNode = ({ id, data }) => {
           value={text}
           onChange={handleTextChange}
           placeholder="Type something like 'Hello, {{name}}!'"
-          maxHeight={200}
+          maxHeight={400}
           className="min-h-[100px]"
         />
       </div>
