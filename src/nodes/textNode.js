@@ -1,20 +1,24 @@
 import React, { useEffect, useMemo,useCallback } from "react";
+
 import { Position, useUpdateNodeInternals } from "reactflow";
+
 import { useStore } from "../store";
 import BaseNode from "./basenode";
 import { AutosizeTextarea } from "../components/ui/autosize-textarea";
 import { Label } from "../components/ui/label";
+
+import { VARIABLE_REGEX } from "../constants";
 
 export const TextNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
   const updateNodeInternals = useUpdateNodeInternals();
   const text = data?.text || "{{Input}}";
 
-  // Extract variables using regex
-  const variables = useMemo(() => {
-    const regex = /{{\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*}}/g;
-    return [...new Set([...text.matchAll(regex)].map((match) => match[1]))];
-  }, [text]);
+// Extract variables using regex
+const variables = useMemo(() => {
+  return [...new Set([...text.matchAll(VARIABLE_REGEX)].map((match) => match[1]))];
+}, [text]);
+
 
   // Update variables in node data only when they change
   useEffect(() => {
