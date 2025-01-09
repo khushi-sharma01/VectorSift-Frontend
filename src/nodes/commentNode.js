@@ -12,7 +12,6 @@ const CommentNode = ({ id, data }) => {
   return (
     <BaseNode 
       id={id} 
-      
       data={data} 
       handles={[]} 
       className="bg-purple-50/95 hover:bg-purple-50"
